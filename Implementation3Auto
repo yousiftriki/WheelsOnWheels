@@ -1,0 +1,56 @@
+brick.SetColorMode(1, 2);
+
+while 1
+    color = brick.ColorCode(1);
+    disp(color);
+    pause(0.5);
+    if (color == 5)
+        brick.StopAllMotors();
+        pause(2);
+        disp('red -- stop');
+    elseif (color == 1)
+        brick.MoveMotor('A', 30); %right
+        brick.MoveMotor('B', 35); %left
+        disp('black -- go forward');
+        distance = brick.UltrasonicDist(3);
+        if brick.TouchPressed(2)
+            disp('touch input sensed');
+            brick.MoveMotor('A', -20);
+            brick.MoveMotor('B', -21);
+            pause(2);
+            brick.StopAllMotors();
+            if distance > 50
+                disp('turn ultrason right');
+                brick.StopAllMotors();
+                brick.MoveMotor('B', 50);
+                brick.MoveMotor('A', -20);
+                pause(0.4);
+            else
+                disp('ultrason turn left');
+                brick.StopAllMotors();
+                brick.MoveMotor('A', 50);
+                brick.MoveMotor('B', -20);
+                pause(0.28);
+            end
+        end 
+    elseif (color == 2 || color == 3 || color == 4)
+        pause(1);
+        brick.StopAllMotors();
+         if (color == 2)
+            brick.playTone(100, 300, 500);
+            pause(1);
+            brick.playTone(100, 300, 500);
+        elseif (color == 3)
+            brick.playTone(100, 300, 500);
+            pause(1);
+            brick.playTone(100, 300, 500);
+            pause(1);
+            brick.playTone(100, 300, 500);
+        end
+        disp('return to manual');
+        manualMode();
+    else
+        brick.StopAllMotors();
+    end
+    pause(0.2);
+end
